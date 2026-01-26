@@ -14,9 +14,11 @@ describe("spl_token", () => {
 
   const signerKp = provider.wallet.payer;
   const toKp = new web3.Keypair();
-  const newUser = new web3.Keypair();
+  
   const amountToMint = new anchor.BN(100_000_000_000); // 100 tokens with 9 decimals
 
+  // created and airdropped new user account to try to mint token
+  const newUser = new web3.Keypair();
   async function airdropSol(publicKey, amount) {
     let airdropTx = await anchor
       .getProvider()
@@ -74,6 +76,7 @@ describe("spl_token", () => {
     console.log("Token (Mint Accoount) Address:", mint.toString());
   });
 
+  // display custom readable error message when signer does not equal mint authority
   it("Mint token", async () => {
     const [mint] = PublicKey.findProgramAddressSync(
       [Buffer.from("my_mint"), signerKp.publicKey.toBuffer()],
@@ -198,5 +201,50 @@ describe("spl_token", () => {
       balance.value.uiAmount > 0,
       "Token balance should be greater than zero",
     );
+  });
+
+   // This displays error from spl_token "Error: owner does not match" which might be difficult to debug
+    it("Mint token using mintTokenVulnerable", async () => {
+    const [mint] = PublicKey.findProgramAddressSync(
+      [Buffer.from("my_mint"), signerKp.publicKey.toBuffer()],
+      program.programId,
+    );
+
+    const ata = splToken.getAssociatedTokenAddressSync(
+      mint,
+      signerKp.publicKey,
+      false,
+    );
+
+    const tx = await program.methods
+      .mintTokenVulnerable(amountToMint) 
+      .accounts({
+        signer: newUser.publicKey,
+        newMint: mint,
+      })
+      .signers([newUser])
+      .rpc();
+
+    console.log("Transaction signature", tx);
+    const mintInfo = await splToken.getMint(provider.connection, mint);
+    assert.equal(
+      mintInfo.mintAuthority?.toString(),
+      signerKp.publicKey.toString(),
+      "Mint authority should be the signer",
+    );
+    assert.equal(
+      mintInfo.supply.toString(),
+      amountToMint.toString(),
+      `Supply shoould be ${amountToMint} tokens (with 9 decimals)`,
+    );
+
+    // verifying the ATA details
+    const tokenAccount = await splToken.getAccount(provider.connection, ata);
+    assert.equal(
+      tokenAccount.amount.toString(),
+      "100000000000",
+      "Token balance shoould be 100 tokens (with 9 decimals)",
+    );
+    console.log("Associated Token Account:", ata.toString());
   });
 });

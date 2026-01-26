@@ -31,8 +31,8 @@ pub mod basic_bank {
         ctx.accounts.get_balance()
     }
 
-    pub fn withdraw(ctx: Context<Withdraw>, amount: u64) -> Result<()> {
-        ctx.accounts.withdraw(amount)?;
+    pub fn withdraw_secure(ctx: Context<WithdrawSecure>, amount: u64) -> Result<()> {
+        ctx.accounts.withdraw_secure(amount)?;
         Ok(())
     }
 

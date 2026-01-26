@@ -9,8 +9,7 @@ pub struct GetBalance<'info> {
     #[account(
         seeds = [b"user_account", user.key().as_ref()],
         bump,
-        constraint = user_account.owner == user.key() @BankError::UnauthorizedAccess
-    )]
+     )]
     pub user_account: Account<'info, UserAccount>,
 
     pub user: Signer<'info>,
@@ -18,6 +17,9 @@ pub struct GetBalance<'info> {
 
 impl<'info> GetBalance<'info> {
     pub fn get_balance(&self) -> Result<u64> {
+        // custom/additional check ensuring only owner account can check balance
+        require!(self.user_account.owner == self.user.key(), BankError::UnauthorizedAccess);
+
         let user_account = &self.user_account;
         let balance = user_account.balance;
 

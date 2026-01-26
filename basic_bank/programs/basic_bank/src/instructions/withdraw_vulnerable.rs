@@ -10,7 +10,6 @@ pub struct WithdrawVulnerable<'info> {
         mut,
         seeds = [b"user_account", user.key().as_ref()],
         bump,
-        constraint = user_account.owner == user.key() @BankError::UnauthorizedAccess,
     )]
     pub user_account: Account<'info, UserAccount>,
 
@@ -22,34 +21,13 @@ pub struct WithdrawVulnerable<'info> {
 
 impl<'info> WithdrawVulnerable<'info> {
     pub fn withdraw_vulnerable(&mut self, amount: u64) -> Result<()> {
-        require!(amount > 0, BankError::ZeroAmount);
 
         let bank = &mut self.bank;
         let user_account = &mut self.user_account;
         let user = &self.user.key();
 
-        // require!(
-        //     user_account.balance >= amount,
-        //     BankError::InsufficientFunds
-        // );
-
-        require!(
-            user_account.owner == user.key(),
-            BankError::UnauthorizedAccess
-        );
-
         user_account.balance -= amount;
         bank.total_deposits -= amount;
-
-        // user_account.balance = user_account
-        //     .balance
-        //     .checked_sub(amount)
-        //     .ok_or(BankError::Overflow)?;
-
-        // bank.total_deposits = bank
-        //     .total_deposits
-        //     .checked_sub(amount)
-        //     .ok_or(BankError::Overflow)?;
 
         let rent = Rent::get()?;
         let user_account_info = self.user_account.to_account_info();

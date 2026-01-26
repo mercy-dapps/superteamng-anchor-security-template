@@ -2,10 +2,11 @@ use anchor_lang::prelude::*;
 pub use crate::{error::*, state::*};
 
 #[derive(Accounts)]
-pub struct Withdraw<'info> {
+pub struct WithdrawSecure<'info> {
     #[account(mut)]
     pub bank: Account<'info, Bank>,
 
+    // added constraint to ensure rightful access to withdraw funds
     #[account(
         mut,
         seeds = [b"user_account", user.key().as_ref()],
@@ -20,19 +21,23 @@ pub struct Withdraw<'info> {
     pub system_program: Program<'info, System>
 }
 
-impl<'info> Withdraw<'info> {
-    pub fn withdraw(&mut self, amount: u64) -> Result<()> {
+impl<'info> WithdrawSecure<'info> {
+    pub fn withdraw_secure(&mut self, amount: u64) -> Result<()> {
+
+        // added check to prevent zero amount withdrawals
         require!(amount > 0, BankError::ZeroAmount);
 
         let bank = &mut self.bank;
         let user_account = &mut self.user_account;
         let user = &self.user.key();
 
+        // added check to ensure sufficient funds before withdrawal
         require!(
             user_account.balance >= amount,
             BankError::InsufficientFunds
         );
 
+        // safe arithmetic operations to prevent overflows/underflows
         user_account.balance = user_account
             .balance
             .checked_sub(amount)
