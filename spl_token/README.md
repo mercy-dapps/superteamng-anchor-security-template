@@ -5,9 +5,9 @@
 
 ---
 
-### This Solana program emphasize the use of anchor constraints for easy debugging
-- **mint_token_secure** – demonstrates the use of anchor constaints in account and custom error using the require! macro. This custom helps us debug easy since we define the error messages.
-- 💬 **mint_token_vulberable** – This instructions lacks any check from the program perspective which is not a good way of writing secured programs. 
+### This Solana program emphasizes the use of anchor constraints for easy debugging
+- **mint_token_secure** – demonstrates the use of anchor constaints in account and custom error using the require! macro. This custom errors helps us debug easily since we define the error messages.
+- **mint_token_vulnerable** – This instruction lacks any check from the program perspective, which is not a standard way of writing secure programs. 
 
 
-**spl_token.ts** – As demonstrated in the test, the "Mint token using mintTokenVulnerable" shows error defined in the spl_token program. This might seem easy to identify the cause of the error for experienced developer but can be difficult to debug for beginners or in-experienced developers.
+**spl_token.ts** – As demonstrated in the test, the "Mint token using mintTokenVulnerable instruction" shows an error defined in the spl_token program. It might seem easy to identify the cause of the error for an experienced developer, but can be difficult to debug for beginners or inexperienced developers.
