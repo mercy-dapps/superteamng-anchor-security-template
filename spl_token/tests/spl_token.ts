@@ -235,7 +235,7 @@ describe("spl_token", () => {
     assert.equal(
       mintInfo.supply.toString(),
       amountToMint.toString(),
-      `Supply shoould be ${amountToMint} tokens (with 9 decimals)`,
+      `Supply should be ${amountToMint} tokens (with 9 decimals)`,
     );
 
     // verifying the ATA details
