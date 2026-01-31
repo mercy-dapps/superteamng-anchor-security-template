@@ -74,7 +74,7 @@ describe("basic_notepad", () => {
 
   it("Create note", async () => {
     const tx = await program.methods
-      .createNote(title, content)
+      .createNoteSecure(title, content)
       .accounts({
         user: wallet.publicKey,
       })
@@ -88,7 +88,7 @@ describe("basic_notepad", () => {
 
   it("update note", async () => {
     const tx = await program.methods
-      .updateNote(uTitle, uContent)
+      .updateNoteSecure(uTitle, uContent)
       .accounts({
         user: wallet.publicKey,
       })

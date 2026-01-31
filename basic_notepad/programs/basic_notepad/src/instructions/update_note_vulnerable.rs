@@ -9,6 +9,8 @@ pub struct UpdateNoteVulnerable<'info> {
         mut,
         seeds = [b"note", title.as_bytes()],
         bump,
+
+        // No signer check added
     )]
     pub note: Account<'info, Note>,
 

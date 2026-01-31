@@ -12,7 +12,7 @@ pub mod error;
 pub mod basic_notepad {
     use super::*;
 
-    pub fn create_note(
+    pub fn create_note_secure(
         ctx: Context<CreateNote>,
         title: String,
         content: String
@@ -46,7 +46,7 @@ pub mod basic_notepad {
         Ok(())
     }
 
-    pub fn update_note(
+    pub fn update_note_secure(
         ctx: Context<UpdateNote>,
         title: String,
         content: String

@@ -8,6 +8,8 @@ pub struct InitializeProfileVulnerable<'info> {
         init,
         payer = user,
         space = 8 + Profile::INIT_SPACE,
+
+        // No strict PDA added, allows for any profile account to be passed
     )]
     pub profile: Account<'info, Profile>,
 

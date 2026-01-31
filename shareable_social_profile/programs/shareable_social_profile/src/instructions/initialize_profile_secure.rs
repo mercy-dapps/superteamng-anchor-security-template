@@ -11,6 +11,8 @@ pub struct InitializeProfile<'info> {
 
         seeds = [b"profile", user.key().as_ref()],
         bump
+
+        // use of PDA to ensure unique PDA account generated for profile
     )]
     pub profile: Account<'info, Profile>,
 

@@ -9,4 +9,4 @@
 - **withdraw_secure** – demonstrates the use of anchor constraints in account as well as additional checks which includes prevention of zero amount withdrawal, validating sufficient balance before withdrawal and arithmetic check to prevent overflow or underflow.
 - **withdraw_vulberable** – This instructions lacks any check leading to panics and program errors. 
 
-**basic_bank.ts** – In the test, we demonstrated how we caught overbalance withdrawal using withdrawSecure function while withdrawVulnerable lead to overflow bug. A couple of tests for other instructions can be found here.
+**basic_bank.ts** – In the test, we demonstrated how we caught overbalance withdrawal using withdrawSecure function while withdrawVulnerable lead to overflow bug. A couple of tests for other instructions can be found in the test file.

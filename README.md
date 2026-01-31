@@ -5,11 +5,11 @@
 
 ---
 
-#### This repository consists of 5 simple solana programs that emphasis security concepts in writing more efficient and secured programs
+#### Here are 5 simple solana programs that emphasis security concepts in writing more efficient and secured programs
 
 - **Basic Bank** – A solana program that models a traditional bank in a decentralized manner. Key functionalities includes: initialize_bank, create_user_account, deposit, get_balance, withdraw.
 
-This solana program demonstrates a key common security issue: funds withdrawal by attackers. It emphasize the need for <strong>Checked Math / Overflow and Authorization Checks using anchor contraints</strong>.
+This solana program demonstrates a key common security issue: funds withdrawal by attackers. It emphasize the need for <strong>Checked Math / Overflow and Signer Checks using anchor contraints</strong>.
 
 - **Basic Notepad** – Majority of people keeps notepad, either for tracking todolist or for documenting events has they unfold. Notepads are dear to our hearts, but what happens if our documented notes get tampered with by someelse making us lose the valueable things in it. Another common vulnerablity is <strong>PDA collision</strong>. We ensured PDA accounts are generated uniquely ensuring no collisions.
 
@@ -18,8 +18,3 @@ This solana program demonstrates a key common security issue: funds withdrawal b
 - **SPL Token** – Number one common exploit is lack of <strong>Authorization Checks</strong>. We have seen token minted from an unauthorized account leading to loss of cash. We demonstrated this exploit and provide a secured solana version of the program instruction.
 
 - **Token Vesting** – This is my favorite solana program. User locks token and the token get released at intervals and are claimable anytime. This introduces the <strong>Re-Initialization Attacks</strong> where attackers re-initialize account and then redirect the recipient accout to their account, stealing funds.
-
-#### Instructions - How to check out each program
-
-- **Build** – anchor build
-- **Test** – anchor test

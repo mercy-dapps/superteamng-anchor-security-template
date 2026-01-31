@@ -10,6 +10,7 @@ pub struct CreateNoteVulnerable<'info> {
         payer = user,
         space = 8 + Note::INIT_SPACE,
 
+        // Seeds used does not generate unique PDAs
         seeds = [b"note", title.as_bytes()],
         bump
     )]

@@ -1,6 +1,14 @@
 use anchor_lang::prelude::*;
 pub use crate::{error::*, state::*};
 
+// ============================================================
+// VULNERABLE: Withdraw checks
+// ============================================================
+// No Signer Check
+// Unchecked Overflow
+// ============================================================
+
+
 #[derive(Accounts)]
 pub struct WithdrawVulnerable<'info> {
     #[account(mut)]

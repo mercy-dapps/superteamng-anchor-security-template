@@ -4,25 +4,23 @@ use crate::{error::*, state::*};
 
 #[derive(Accounts)]
 #[instruction(title: String)]
-pub struct CreateNote<'info> {
+pub struct UpdateNote<'info> {
     #[account(
-        init,
-        payer = user,
-        space = 8 + Note::INIT_SPACE,
-
+        mut,
         seeds = [b"note", title.as_bytes(), user.key().as_ref()],
-        bump
+        bump,
+
+        // Added signer check
+        constraint = note.author == user.key() @ NoteError::Unauthorized,
     )]
     pub note: Account<'info, Note>,
 
     #[account(mut)]
-    pub user: Signer<'info>,
-
-    pub system_program: Program<'info, System>
+    pub user: Signer<'info>
 }
 
-impl<'info> CreateNote<'info>  {
-    pub fn create(
+impl<'info> UpdateNote<'info>  {
+    pub fn update(
         &mut self,
         title: String,
         content: String
@@ -30,13 +28,10 @@ impl<'info> CreateNote<'info>  {
         require!(title.len() <= 50, NoteError::TitleTooLong);
         require!(content.len() <= 50, NoteError::ContentTooLong);
 
-        self.note.set_inner( Note{
-            author: self.user.key(),
-            title,
-            content
-        });
+        self.note.title = title;
+        self.note.content = content;
 
-        msg!("Note created");
+        msg!("Note Updated");
         Ok(())
     }
 }

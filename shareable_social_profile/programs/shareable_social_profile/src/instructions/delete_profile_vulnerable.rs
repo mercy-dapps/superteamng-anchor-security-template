@@ -7,6 +7,7 @@ pub struct DeleteProfileVulnerable<'info> {
     #[account(
         mut,
         close = user,
+        // No signer check
     )]
     pub profile: Account<'info, Profile>,
 

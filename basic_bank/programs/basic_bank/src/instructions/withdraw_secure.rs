@@ -6,7 +6,7 @@ pub struct WithdrawSecure<'info> {
     #[account(mut)]
     pub bank: Account<'info, Bank>,
 
-    // added constraint to ensure rightful access to withdraw funds
+    // Added constraint to ensure rightful access to withdraw funds
     #[account(
         mut,
         seeds = [b"user_account", user.key().as_ref()],
@@ -24,20 +24,20 @@ pub struct WithdrawSecure<'info> {
 impl<'info> WithdrawSecure<'info> {
     pub fn withdraw_secure(&mut self, amount: u64) -> Result<()> {
 
-        // added check to prevent zero amount withdrawals
+        // Added check to prevent zero amount withdrawals
         require!(amount > 0, BankError::ZeroAmount);
 
         let bank = &mut self.bank;
         let user_account = &mut self.user_account;
         let user = &self.user.key();
 
-        // added check to ensure sufficient funds before withdrawal
+        // Added check to ensure sufficient funds before withdrawal
         require!(
             user_account.balance >= amount,
             BankError::InsufficientFunds
         );
 
-        // safe arithmetic operations to prevent overflows/underflows
+        // Safe arithmetic operations to prevent overflows/underflows
         user_account.balance = user_account
             .balance
             .checked_sub(amount)

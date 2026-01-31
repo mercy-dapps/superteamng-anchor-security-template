@@ -9,6 +9,7 @@ pub struct DeleteProfile<'info> {
         close = user,
         seeds = [b"profile", user.key().as_ref()],
         bump,
+        // Signer check
         constraint = profile.owner == user.key() @ ProfileError::Unauthorized,
     )]
     pub profile: Account<'info, Profile>,

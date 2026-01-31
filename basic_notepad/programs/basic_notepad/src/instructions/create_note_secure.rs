@@ -4,21 +4,26 @@ use crate::{error::*, state::*};
 
 #[derive(Accounts)]
 #[instruction(title: String)]
-pub struct UpdateNote<'info> {
+pub struct CreateNote<'info> {
     #[account(
-        mut,
+        init,
+        payer = user,
+        space = 8 + Note::INIT_SPACE,
+
+        // Use of seeds to generate unique PDAs (added signer key ensuring uniqueness)
         seeds = [b"note", title.as_bytes(), user.key().as_ref()],
-        bump,
-        constraint = note.author == user.key() @ NoteError::Unauthorized,
+        bump
     )]
     pub note: Account<'info, Note>,
 
     #[account(mut)]
-    pub user: Signer<'info>
+    pub user: Signer<'info>,
+
+    pub system_program: Program<'info, System>
 }
 
-impl<'info> UpdateNote<'info>  {
-    pub fn update(
+impl<'info> CreateNote<'info>  {
+    pub fn create(
         &mut self,
         title: String,
         content: String
@@ -26,10 +31,13 @@ impl<'info> UpdateNote<'info>  {
         require!(title.len() <= 50, NoteError::TitleTooLong);
         require!(content.len() <= 50, NoteError::ContentTooLong);
 
-        self.note.title = title;
-        self.note.content = content;
+        self.note.set_inner( Note{
+            author: self.user.key(),
+            title,
+            content
+        });
 
-        msg!("Note Updated");
+        msg!("Note created");
         Ok(())
     }
 }
