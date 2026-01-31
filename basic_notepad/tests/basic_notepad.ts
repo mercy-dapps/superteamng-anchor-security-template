@@ -14,9 +14,8 @@ describe("basic_notepad", () => {
   const program = anchor.workspace.basicNotepad as Program<BasicNotepad>;
 
   const attacker = new web3.Keypair();
-  const amount = BigInt(2 * 10 ** 6); // Mint 2 tokens
 
-  // created and airdropped beneficiary to pay for signing
+  // created and airdropped attacker to pay for signing
   async function airdropSol(publicKey, airdropAmount) {
     let airdropTx = await anchor
       .getProvider()
@@ -66,7 +65,7 @@ describe("basic_notepad", () => {
     program.programId,
   );
 
-   const [vNotePda] = PublicKey.findProgramAddressSync(
+  const [vNotePda] = PublicKey.findProgramAddressSync(
     [Buffer.from("note"), Buffer.from(title)],
     program.programId,
   );
@@ -129,7 +128,7 @@ describe("basic_notepad", () => {
   });
 
   // THE VULNERABLE PART
-// created by the wallet
+  // note created by the wallet
   it("Create note - vulnerable", async () => {
     const tx = await program.methods
       .createNoteVulnerable(title, content)
@@ -144,12 +143,16 @@ describe("basic_notepad", () => {
     assert.equal(vGetNote.title, title);
   });
 
+  it("get all notes by attacker - vulnerable", async () => {
+    const vGetNote = await program.account.note.all();
+    console.log(vGetNote);
+  });
+
   // updated by an attacker
   it("update note - vulnerable", async () => {
     const tx = await program.methods
       .updateNoteVulnerable(uTitle, uContent)
-      .accountsPartial({
-        note: vNotePda,
+      .accounts({
         user: attacker.publicKey,
       })
       .signers([attacker])
@@ -157,7 +160,7 @@ describe("basic_notepad", () => {
     console.log("Your transaction signature", tx);
 
     const vGetNote = await program.account.note.fetch(vNotePda);
-    console.log("Updated vulnerable", vGetNote);
+    console.log("Updated by another user (attacker) - vulnerable", vGetNote);
     assert.equal(vGetNote.content, uContent);
   });
 });

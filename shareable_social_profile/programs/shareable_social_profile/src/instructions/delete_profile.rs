@@ -8,7 +8,8 @@ pub struct DeleteProfile<'info> {
         mut,
         close = user,
         seeds = [b"profile", user.key().as_ref()],
-        bump
+        bump,
+        constraint = profile.owner == user.key() @ ProfileError::Unauthorized,
     )]
     pub profile: Account<'info, Profile>,
 

@@ -3,29 +3,28 @@ use anchor_lang::prelude::*;
 use crate::{error::*, state::*};
 
 #[derive(Accounts)]
-pub struct UpdateProfile<'info> {
+pub struct InitializeProfileVulnerable<'info> {
     #[account(
-        mut,
-        seeds = [b"profile", user.key().as_ref()],
-        bump,
-        constraint = profile.owner == user.key() @ ProfileError::Unauthorized,
+        init,
+        payer = user,
+        space = 8 + Profile::INIT_SPACE,
     )]
     pub profile: Account<'info, Profile>,
 
     #[account(mut)]
-    pub user: Signer<'info>
+    pub user: Signer<'info>,
+
+    pub system_program: Program<'info, System>
 }
 
-impl<'info> UpdateProfile<'info>  {
-    pub fn update(
+impl<'info> InitializeProfileVulnerable<'info>  {
+    pub fn initialize_vulnerable(
         &mut self,
         name: String,
         title: String,
         bio: String,
         avatar_link: String
     ) -> Result<()> {
-        require!(self.profile.owner == self.user.key(), ProfileError::Unauthorized);
-
         require!(name.len() <= 50, ProfileError::TextTooLong);
         require!(title.len() <= 50, ProfileError::TextTooLong);
         require!(bio.len() <= 200, ProfileError::TextTooLong);
@@ -39,7 +38,7 @@ impl<'info> UpdateProfile<'info>  {
             avatar_link
         });
 
-        msg!("Profile updated");
+        msg!("Profile created");
         Ok(())
     }
 }

@@ -30,6 +30,24 @@ pub mod shareable_social_profile {
         Ok(())
     }
 
+    pub fn initialize_profile_vulnerable(
+        ctx: Context<InitializeProfileVulnerable>,
+        name: String,
+        title: String,
+        bio: String,
+        avatar_link: String
+    ) -> Result<()> {
+       
+       ctx.accounts.initialize_vulnerable(
+        name,
+        title,
+        bio,
+        avatar_link
+       )?;
+
+        Ok(())
+    }
+
      pub fn update_profile(
         ctx: Context<UpdateProfile>,
         name: String,
@@ -53,6 +71,14 @@ pub mod shareable_social_profile {
     ) -> Result<()> {
        
        ctx.accounts.delete()?;
+
+        Ok(())
+    }
+    pub fn delete_profile_vulnerable(
+        ctx: Context<DeleteProfileVulnerable>
+    ) -> Result<()> {
+       
+       ctx.accounts.delete_vulnerable()?;
 
         Ok(())
     }

@@ -5,6 +5,6 @@ pub enum ProfileError{
     #[msg("Text too long")]
     TextTooLong,
 
-    #[msg("Not the rightful owner to view note")]
+    #[msg("Unauthorized")]
     Unauthorized, 
 } 
