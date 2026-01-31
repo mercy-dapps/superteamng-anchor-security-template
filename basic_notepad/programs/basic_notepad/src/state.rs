@@ -1,7 +1,7 @@
 use anchor_lang::prelude::*;
 
 #[account]
-#[derive(InitSpace)]
+#[derive(InitSpace, Default)]
 pub struct Note {
     pub author: Pubkey,
     #[max_len(50)]

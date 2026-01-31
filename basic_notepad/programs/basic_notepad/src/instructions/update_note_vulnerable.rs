@@ -4,25 +4,20 @@ use crate::{error::*, state::*};
 
 #[derive(Accounts)]
 #[instruction(title: String)]
-pub struct CreateNoteVulnerable<'info> {
+pub struct UpdateNoteVulnerable<'info> {
     #[account(
-        init,
-        payer = user,
-        space = 8 + Note::INIT_SPACE,
-
+        mut,
         seeds = [b"note", title.as_bytes()],
-        bump
+        bump,
     )]
     pub note: Account<'info, Note>,
 
     #[account(mut)]
-    pub user: Signer<'info>,
-
-    pub system_program: Program<'info, System>
+    pub user: Signer<'info>
 }
 
-impl<'info> CreateNoteVulnerable<'info>  {
-    pub fn create_vulnerable(
+impl<'info> UpdateNoteVulnerable<'info>  {
+    pub fn update_vulnerable(
         &mut self,
         title: String,
         content: String
@@ -30,13 +25,10 @@ impl<'info> CreateNoteVulnerable<'info>  {
         require!(title.len() <= 50, NoteError::TitleTooLong);
         require!(content.len() <= 50, NoteError::ContentTooLong);
 
-        self.note.set_inner( Note{
-            author: self.user.key(),
-            title,
-            content
-        });
+        self.note.title = title;
+        self.note.content = content;
 
-        msg!("Note created");
+        msg!("Note Updated");
         Ok(())
     }
 }

@@ -45,4 +45,48 @@ pub mod basic_notepad {
 
         Ok(())
     }
+
+    pub fn update_note(
+        ctx: Context<UpdateNote>,
+        title: String,
+        content: String
+    ) -> Result<()> {
+       
+       ctx.accounts.update(
+        title,
+        content
+       )?;
+
+        Ok(())
+    }
+
+    // vulnerable
+
+      pub fn create_note_vulnerable(
+        ctx: Context<CreateNoteVulnerable>,
+        title: String,
+        content: String
+    ) -> Result<()> {
+       
+       ctx.accounts.create_vulnerable(
+        title,
+        content
+       )?;
+
+        Ok(())
+    }
+
+     pub fn update_note_vulnerable(
+        ctx: Context<UpdateNoteVulnerable>,
+        title: String,
+        content: String
+    ) -> Result<()> {
+       
+       ctx.accounts.update_vulnerable(
+        title,
+        content
+       )?;
+
+        Ok(())
+    }
 }
