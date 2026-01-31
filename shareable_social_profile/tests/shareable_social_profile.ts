@@ -152,4 +152,9 @@ describe("shareable_social_profile", () => {
       .rpc();
     console.log("Your transaction signature", tx);
   });
+
+  it("Get all profile - vulnerable", async () => {
+    const profiles = await program.account.profile.all();
+    console.log("All profiles:", profiles);
+  });
 });
