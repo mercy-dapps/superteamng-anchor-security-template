@@ -1,4 +1,4 @@
-<h1 align="center">Simple Basic Back Program</h1>
+<h1 align="center">Simple Basic Bank Program</h1>
 <p align="center">
   A Solana program that create a bank, user account, allows user to get balance, deposit and withdraw.
 </p>
